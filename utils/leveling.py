@@ -52,12 +52,15 @@ class LevelerDB():
             # player_name = await self.get_name(user_id)
             user_data = {
                 "player_level": 1,
-                "xp": 0,
+                "xp": 1,
                 "next_level_xp": 100,
                 "times_siued": 0,
                 "player_name": player_name if player_name else "Unknown",
-                "messages_sent": 0,
+                "messages_sent": 1,
             }
+            if SIUUUUUUUUU:
+                user_data["times_siued"] += 1
+                user_data["xp"] += 49
             user.set(user_data)
             return False
     async def get_progress(self, user_id):
@@ -65,7 +68,7 @@ class LevelerDB():
         user_data = user.get()
         if user_data.exists:
             user_data = user_data.to_dict()
-            return user_data["xp"], user_data["next_level_xp"], user_data["player_level"]
+            return user_data["xp"], user_data["next_level_xp"], user_data["player_level"],user_data["times_siued"], user_data["player_name"], user_data["messages_sent"]
         else:
             print("User not found")
             return False

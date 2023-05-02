@@ -26,9 +26,38 @@ class Levels(commands.Cog):
         embed = discord.Embed(color=0x00ff00)
         embed.set_thumbnail(url="https://media.tenor.com/nDP41DutB9QAAAAS/cr7-siu.gif")
         embed.set_author(name=ctx.author.name, icon_url="https://media.tenor.com/nDP41DutB9QAAAAS/cr7-siu.gif")
-        level = self.leveler.get_progress(ctx.author.id)
+        level = await self.leveler.get_progress(ctx.author.id)
+        siu_ratio = [(level[3]/level[5]),level[3],level[5]]
         embed.description = f"you are level {level[2]} with {level[0]}/{level[1]} xp to the next level"
+        embed.add_field(name=f"SIU ratio: {siu_ratio[0]}%", value=f"times SUIed: {siu_ratio[1]}, total messages: {siu_ratio[2]}", inline=False)
         await ctx.respond(embed=embed)
+    
+    # @commands.slash_command(name="leaderboard", description="Shows the top 10 players")
+    # async def leaderboard(self, ctx):
+    #     embed = discord.Embed(color=0x00ff00)
+    #     embed.set_thumbnail(url="https://media.tenor.com/nDP41DutB9QAAAAS/cr7-siu.gif")
+    #     embed.set_author(name=ctx.author.name, icon_url="https://media.tenor.com/nDP41DutB9QAAAAS/cr7-siu.gif")
+    #     leaderboard = self.leveler.get_leaderboard()
+    #     description = ""
+    #     for i in range(10):
+    #         description += f"{i+1}. {leaderboard[i][0]} - Level {leaderboard[i][1]}\n"
+    #     embed.description = description
+    #     await ctx.respond(embed=embed)
+
+
+
+    # @commands.slash_command(name="stalk", description="Shows the level stats of a user")
+    # @option("username", description="Enter the username of the user you want to stalk", required=True)
+    # @commands.guild_only()
+    # async def stalk(self, ctx, username):
+    #     embed = discord.Embed(color=0x00ff00)
+    #     embed.set_thumbnail(url="https://media.tenor.com/nDP41DutB9QAAAAS/cr7-siu.gif")
+    #     embed.set_author(name=ctx.author.name, icon_url="https://media.tenor.com/nDP41DutB9QAAAAS/cr7-siu.gif")
+    #     user = await self.bot.fetch_user(username)
+    #     level = self.leveler.get_progress(user)
+    #     embed.description = f"{user} is level {level[2]} with {level[0]}/{level[1]} xp to the next level"
+    #     await ctx.respond(embed=embed)
+
     
     
             

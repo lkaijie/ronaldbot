@@ -33,7 +33,6 @@ levels.leveler = leveler
 # levels = bot.get_cog("Levels")
 # levels.leveler = leveler
 
-
 @bot.event
 async def on_ready():
     print(f"We have logged in as {bot.user}")
@@ -52,12 +51,6 @@ async def bot_joined(ctx: discord.ApplicationContext):
     await ctx.respond(
         f"I joined at {discord.utils.format_dt(bot.user.joined_at)}"
     )
-
-
-
-
-
-
 
 # To learn how to add descriptions and choices to options, check slash_options.py
 bot.run(config.client_discord_token)
