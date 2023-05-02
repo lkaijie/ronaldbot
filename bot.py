@@ -3,20 +3,35 @@
 import os
 import discord
 import config
+from utils.leveling import LevelerDB
 
 
 intents = discord.Intents.all()
 intents.members = True
 
 bot = discord.Bot(intents=intents)
-# db = FirestoreDB()
+leveler = LevelerDB()
 
 for file in os.listdir("./cogs"):
     if file.endswith(".py"):
         name = file[:-3]
         bot.load_extension(f"cogs.{name}")
+# bot.load_extension("cogs.levels")
+# bot.load_extension("cogs.SIUCOG")
+# bot.load_extension("cogs.info")
 
+siucog = bot.get_cog("SIU")
+siucog.leveler = leveler
+levels = bot.get_cog("Levels")
+levels.leveler = leveler
 
+# for x in bot.cogs:
+#     print(x)
+
+# siucog = bot.get_cog("SIU")
+# siucog.leveler = leveler
+# levels = bot.get_cog("Levels")
+# levels.leveler = leveler
 
 
 @bot.event
