@@ -33,6 +33,7 @@ class LevelerDB():
     async def add_xp(self, user_id, xp, rare=False, SIUUUUUUUUU=False, player_name=None):
         user = self.db.collection("SIUers").document(str(user_id))
         user_data = user.get()
+        level_up = False
         if user_data.exists:
             user_data = user_data.to_dict()
             if random.randint(1, 100) <= 5:
@@ -45,7 +46,8 @@ class LevelerDB():
             user.set(user_data)
             if user_data["xp"] >= user_data["next_level_xp"]:
                 await self.level_up(user_id)
-            return True, user_data["xp"], user_data["next_level_xp"]
+                level_up = True
+            return level_up, user_data["xp"], user_data["next_level_xp"],user_data["player_level"]
         else:
             print("User not found")
             print("Creating user...")
@@ -69,6 +71,23 @@ class LevelerDB():
         if user_data.exists:
             user_data = user_data.to_dict()
             return user_data["xp"], user_data["next_level_xp"], user_data["player_level"],user_data["times_siued"], user_data["player_name"], user_data["messages_sent"]
+        else:
+            print("User not found")
+            return False
+    async def get_rank(self, user_id):
+        user = self.db.collection("SIUers").document(str(user_id))
+        user_data = user.get()
+        if user_data.exists:
+            user_data = user_data.to_dict()
+            rank = 1
+            siu_rank = 1
+            for x in self.db.collection("SIUers").stream():
+                x = x.to_dict()
+                if int(x["player_level"]) > int(user_data["player_level"]):
+                    rank += 1
+                if int(x["times_siued"]) > int(user_data["times_siued"]):
+                    siu_rank += 1
+            return rank, siu_rank
         else:
             print("User not found")
             return False

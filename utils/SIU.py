@@ -25,7 +25,10 @@ class RonaldoHimself():
         for x in index:
             string[x] = string[x].capitalize()
         string = "".join(string)
-        string = await self.add_spaces(string)
+        try:
+            string = await self.add_spaces(string)
+        except:
+            pass
         # if SIUUUUUUUUU:
         #     pass
         return SIUUUUUUUUU, index, string
