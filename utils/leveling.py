@@ -91,4 +91,12 @@ class LevelerDB():
         else:
             print("User not found")
             return False
-    # async def get_
+    
+    
+    def get_leaderboard(self):
+        leaderboard = []
+        for x in self.db.collection("SIUers").stream():
+            x = x.to_dict()
+            leaderboard.append([x["player_name"], x["player_level"]])
+        leaderboard.sort(key=lambda x: x[1], reverse=True)
+        return leaderboard

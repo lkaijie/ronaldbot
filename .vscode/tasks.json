@@ -1,0 +1,22 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Run Bot",
+        "type": "shell",
+        "command": "${workspaceFolder}\\.venv\\Scripts\\python",
+        "args": [
+          "bot.py"
+        ],
+        "presentation": {
+          "reveal": "always",
+          "panel": "shared"
+        },
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        }
+      }
+    ]
+  }
+  
