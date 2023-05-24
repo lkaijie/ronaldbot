@@ -62,13 +62,11 @@ class Levels(commands.Cog):
         member_list = guild.members
         member_names = []
         for member in member_list:
-            member_names.append(member.display_name)
-
+            member_names.append(member.name)
         filtered_leaderboard = []
         for x in leaderboard:
             if x[0] in member_names:
                 filtered_leaderboard.append(x)
-        
         description = ""
         for i in range(len(filtered_leaderboard)):
             description += f"{i+1}. {filtered_leaderboard[i][0]} - Level {filtered_leaderboard[i][1]}\n"
@@ -76,9 +74,29 @@ class Levels(commands.Cog):
         embed.description = description
         await ctx.respond(embed=embed)
 
+    @commands.slash_command(name="siu_leaders", description="Shows the top 10 players")
+    async def siu_leaderboard(self, ctx):
+        embed = discord.Embed(color=0x00ff00)
+        embed.set_thumbnail(url="https://media.tenor.com/nDP41DutB9QAAAAS/cr7-siu.gif")
+        guild = ctx.guild
+        leaderboard = self.leveler.get_leaderboard_siu()  # Assuming this retrieves the global leaderboard
+        member_list = guild.members
+        member_names = []
+        for member in member_list:
+            member_names.append(member.name)
+        filtered_leaderboard = []
+        for x in leaderboard:
+            if x[0] in member_names:
+                filtered_leaderboard.append(x)
+        description = ""
+        for i in range(len(filtered_leaderboard)):
+            description += f"{i+1}. {filtered_leaderboard[i][0]} - SIU count: {filtered_leaderboard[i][1]}\n"
+        embed.description = description
+        await ctx.respond(embed=embed)
+        return
 
 
-    @commands.slash_command(name="global leaders", description="Global leaderboards")
+    @commands.slash_command(name="global_leaders", description="Global leaderboards")
     async def g_leaderboard(self, ctx):
         embed = discord.Embed(color=0x00ff00)
         embed.set_thumbnail(url="https://media.tenor.com/nDP41DutB9QAAAAS/cr7-siu.gif")

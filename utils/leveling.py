@@ -100,3 +100,11 @@ class LevelerDB():
             leaderboard.append([x["player_name"], x["player_level"]])
         leaderboard.sort(key=lambda x: x[1], reverse=True)
         return leaderboard
+    
+    def get_leaderboard_siu(self):
+        leaderboard = []
+        for x in self.db.collection("SIUers").stream():
+            x = x.to_dict()
+            leaderboard.append([x["player_name"], x["times_siued"]])
+        leaderboard.sort(key=lambda x: x[1], reverse=True)
+        return leaderboard
