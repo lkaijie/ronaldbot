@@ -17,6 +17,7 @@ class LevelerDB():
         self.db = firestore.client()
 
     async def level_up(self, user_id):
+        '''Returns the new level of the user as an int'''
         user = self.db.collection("SIUers").document(str(user_id))
         user_data = user.get()
         if user_data.exists:
@@ -31,6 +32,7 @@ class LevelerDB():
             return False
         
     async def add_xp(self, user_id, xp, rare=False, SIUUUUUUUUU=False, player_name=None):
+        '''Returns a tuple of (level_up, xp, next_level_xp, player_level)'''
         user = self.db.collection("SIUers").document(str(user_id))
         user_data = user.get()
         level_up = False
@@ -51,7 +53,6 @@ class LevelerDB():
         else:
             print("User not found")
             print("Creating user...")
-            # player_name = await self.get_name(user_id)
             user_data = {
                 "player_level": 1,
                 "xp": 1,
@@ -65,7 +66,9 @@ class LevelerDB():
                 user_data["xp"] += 49
             user.set(user_data)
             return False
+        
     async def get_progress(self, user_id):
+        '''Returns a tuple of (xp, next_level_xp, player_level)'''
         user = self.db.collection("SIUers").document(str(user_id))
         user_data = user.get()
         if user_data.exists:
@@ -74,7 +77,9 @@ class LevelerDB():
         else:
             print("User not found")
             return False
+        
     async def get_rank(self, user_id):
+        '''Returns a tuple of (rank, siu_rank)'''
         user = self.db.collection("SIUers").document(str(user_id))
         user_data = user.get()
         if user_data.exists:
@@ -92,8 +97,8 @@ class LevelerDB():
             print("User not found")
             return False
     
-    
     def get_leaderboard(self):
+        '''Returns a list of lists of [player_name, player_level] sorted by level'''
         leaderboard = []
         for x in self.db.collection("SIUers").stream():
             x = x.to_dict()
@@ -102,6 +107,7 @@ class LevelerDB():
         return leaderboard
     
     def get_leaderboard_siu(self):
+        '''Returns a list of lists of [player_name, player_level] sorted by siu'''
         leaderboard = []
         for x in self.db.collection("SIUers").stream():
             x = x.to_dict()
