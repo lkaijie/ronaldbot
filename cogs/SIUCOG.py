@@ -9,6 +9,7 @@ from discord import option
 from discord.ui import View, button
 from utils.SIU import RonaldoHimself
 import asyncio
+import random
 # from utils.leveling import LevelerDB
 
 startTime = time.time()
@@ -34,6 +35,12 @@ class SIU(commands.Cog):
             embed.set_thumbnail(url="https://media.tenor.com/nDP41DutB9QAAAAS/cr7-siu.gif")
             embed.description = f"you said SIUUUUUUUUU in your sentence: {crossout_text}"
             xp = await self.leveler.add_xp(message.author.id, 1, SIUUUUUUUUU=True, player_name=message.author.name)
+            await message.add_reaction("🇸")
+            await message.add_reaction("🇮")
+            await message.add_reaction("🇺")
+            # for i in range(random.randint(0,5)):
+            #     print(i)
+            #     await message.add_reaction("🇺") # this does not work because it does not stack? i guesss
             await message.channel.send(embed=embed)
             if xp[0]:
                 await message.channel.send(f"{message.author.name} just leveled up to level {xp[3]+1}")
