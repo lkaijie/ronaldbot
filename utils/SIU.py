@@ -29,8 +29,6 @@ class RonaldoHimself():
             string = await self.add_spaces(string)
         except:
             pass
-        # if SIUUUUUUUUU:
-        #     pass
         return SIUUUUUUUUU, index, string
     
     async def add_spaces(self,s):

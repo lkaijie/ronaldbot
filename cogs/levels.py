@@ -108,9 +108,9 @@ class Levels(commands.Cog):
         await ctx.respond(embed=embed)
 
 
-    @commands.slash_command(name="levels_test", description="Shows the top 10 players")
-    async def levels_test(self, ctx):
-        pass
+    # @commands.slash_command(name="levels_test", description="Shows the top 10 players")
+    # async def levels_test(self, ctx):
+    #     pass
     
             
     

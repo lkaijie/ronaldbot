@@ -38,9 +38,6 @@ class SIU(commands.Cog):
             await message.add_reaction("🇸")
             await message.add_reaction("🇮")
             await message.add_reaction("🇺")
-            # for i in range(random.randint(0,5)):
-            #     print(i)
-            #     await message.add_reaction("🇺") # this does not work because it does not stack? i guesss
             await message.channel.send(embed=embed)
             if xp[0]:
                 await message.channel.send(f"{message.author.name} just leveled up to level {xp[3]+1}")
