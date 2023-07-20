@@ -35,10 +35,6 @@ class Info(commands.Cog):
                 **=-**
             """, inline=False)
         await ctx.respond(embed=embed)
-    # @commands.slash_command(name="stats", description="Displays stats")
-    # async def stats(self, ctx):
-    #     # guess get total artits tracked and also unique artist tracked
-    #     pass
 
 def setup(bot):
     bot.add_cog(Info(bot))

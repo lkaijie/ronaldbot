@@ -25,77 +25,68 @@ class Levels(commands.Cog):
     @commands.slash_command(name="rank", description="Shows your level stats")
     @option("username", description="Enter the username of the user you want to stalk", required=False, type=discord.User)
     async def level(self, ctx, username):
-        if username != None:
+        def create_embed(user, level, rank, siu_ratio)-> discord.Embed:
             embed = discord.Embed(color=0x00ff00)
-            embed.set_thumbnail(url="https://media.tenor.com/nDP41DutB9QAAAAS/cr7-siu.gif")
+            gif_url = "https://media.tenor.com/nDP41DutB9QAAAAS/cr7-siu.gif"
+            embed.set_thumbnail(url=gif_url)
+            embed.set_author(name=user.name+f" rank #{rank[0]} siu rank #{rank[1]}", icon_url=gif_url)
+            if level == False:
+                embed.description = "0 messages sent"
+                return False
+            siu_ratio = [(level[3]/level[5]),level[3],level[5]]
+            embed.description = f"@{user.name} is level {level[2]} with {level[0]}/{level[1]} xp to the next level"
+            embed.add_field(name=f"SIU ratio: {siu_ratio[0]:0.2f}%", value=f"times SUIed: {siu_ratio[1]}, total messages: {siu_ratio[2]}", inline=False)
+            return embed
+        
+        if username != None:
             level = await self.leveler.get_progress(username.id)
             rank = await self.leveler.get_rank(username.id)
-            embed.set_author(name=username.name+f" rank #{rank[0]} siu rank #{rank[1]}", icon_url="https://media.tenor.com/nDP41DutB9QAAAAS/cr7-siu.gif")
-            if level == False:
+            embed = create_embed(username, level, rank, None)
+            if not embed:
                 await ctx.respond("0 messages sent")
                 return
-            siu_ratio = [(level[3]/level[5]),level[3],level[5]]
-            embed.description = f"@{username.name} is level {level[2]} with {level[0]}/{level[1]} xp to the next level"
-            embed.add_field(name=f"SIU ratio: {siu_ratio[0]:0.2f}%", value=f"times SUIed: {siu_ratio[1]}, total messages: {siu_ratio[2]}", inline=False)
-            await ctx.respond(embed=embed)
-
+            else:
+                await ctx.respond(embed=embed)
         else:
-            embed = discord.Embed(color=0x00ff00)
-            embed.set_thumbnail(url="https://media.tenor.com/nDP41DutB9QAAAAS/cr7-siu.gif")
             level = await self.leveler.get_progress(ctx.author.id)
             rank = await self.leveler.get_rank(ctx.author.id)
-            embed.set_author(name=ctx.author.name+f" rank #{rank[0]} siu rank #{rank[1]}", icon_url="https://media.tenor.com/nDP41DutB9QAAAAS/cr7-siu.gif")
-            if level == False:
+            embed = create_embed(ctx.author, level, rank, None)
+            if not embed:
                 await ctx.respond("0 messages sent")
                 return
-            siu_ratio = [(level[3]/level[5]),level[3],level[5]]
-            embed.description = f"you are level {level[2]} with {level[0]}/{level[1]} xp to the next level"
-            embed.add_field(name=f"SIU ratio: {siu_ratio[0]:0.2f}%", value=f"times SUIed: {siu_ratio[1]}, total messages: {siu_ratio[2]}", inline=False)
-            await ctx.respond(embed=embed)
+            else:
+                await ctx.respond(embed=embed)
+        return
+
+    def generate_leaderboard_embed(title, color, thumbnail_url, guild, leaderboard, field_name):
+        embed = discord.Embed(title=title, color=color)
+        embed.set_thumbnail(url=thumbnail_url)
+        member_names = [member.name for member in guild.members]
+        filtered_leaderboard = [(name, value) for name, value in leaderboard if name in member_names]
+
+        description = ""
+        for i, (name, value) in enumerate(filtered_leaderboard):
+            description += f"{i+1}. {name} - {field_name} {value}\n"
+
+        embed.description = description
+        return embed
         
     @commands.slash_command(name="leaderboard", description="Shows the top 10 players")
     async def leaderboard(self, ctx):
-        embed = discord.Embed(color=0x00ff00)
-        embed.set_thumbnail(url="https://media.tenor.com/nDP41DutB9QAAAAS/cr7-siu.gif")
         guild = ctx.guild
         leaderboard = self.leveler.get_leaderboard()  # Assuming this retrieves the global leaderboard
-        member_list = guild.members
-        member_names = []
-        for member in member_list:
-            member_names.append(member.name)
-        filtered_leaderboard = []
-        for x in leaderboard:
-            if x[0] in member_names:
-                filtered_leaderboard.append(x)
-        description = ""
-        for i in range(len(filtered_leaderboard)):
-            description += f"{i+1}. {filtered_leaderboard[i][0]} - Level {filtered_leaderboard[i][1]}\n"
-        
-        embed.description = description
+        embed = self.generate_leaderboard_embed("Global Leaderboard", 0x00ff00, "https://media.tenor.com/nDP41DutB9QAAAAS/cr7-siu.gif", guild, leaderboard, "Level")
         await ctx.respond(embed=embed)
+        return 
 
     @commands.slash_command(name="siu_leaders", description="Shows the top 10 players")
     async def siu_leaderboard(self, ctx):
-        embed = discord.Embed(color=0x00ff00)
-        embed.set_thumbnail(url="https://media.tenor.com/nDP41DutB9QAAAAS/cr7-siu.gif")
         guild = ctx.guild
         leaderboard = self.leveler.get_leaderboard_siu()  # Assuming this retrieves the global leaderboard
-        member_list = guild.members
-        member_names = []
-        for member in member_list:
-            member_names.append(member.name)
-        filtered_leaderboard = []
-        for x in leaderboard:
-            if x[0] in member_names:
-                filtered_leaderboard.append(x)
-        description = ""
-        for i in range(len(filtered_leaderboard)):
-            description += f"{i+1}. {filtered_leaderboard[i][0]} - SIU count: {filtered_leaderboard[i][1]}\n"
-        embed.description = description
+        embed = self.generate_leaderboard_embed("Global SIU Leaderboard", 0x00ff00, "https://media.tenor.com/nDP41DutB9QAAAAS/cr7-siu.gif", guild, leaderboard, "SIU count")
         await ctx.respond(embed=embed)
         return
-
-
+    
     @commands.slash_command(name="global_leaders", description="Global leaderboards")
     async def g_leaderboard(self, ctx):
         embed = discord.Embed(color=0x00ff00)
@@ -106,14 +97,6 @@ class Levels(commands.Cog):
             description += f"{i+1}. {leaderboard[i][0]} - Level {leaderboard[i][1]}\n"
         embed.description = description
         await ctx.respond(embed=embed)
-
-
-    # @commands.slash_command(name="levels_test", description="Shows the top 10 players")
-    # async def levels_test(self, ctx):
-    #     pass
-    
-            
-    
 
 def setup(bot):
     bot.add_cog(Levels(bot))
