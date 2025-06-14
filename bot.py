@@ -41,4 +41,5 @@ async def bot_joined(ctx: discord.ApplicationContext):
     )
 
 # To learn how to add descriptions and choices to options, check slash_options.py
+# bot.run(os.getenv("client_discord_token"))
 bot.run(config.client_discord_token)

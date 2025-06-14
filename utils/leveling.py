@@ -13,6 +13,7 @@ import random
 class LevelerDB():
     def __init__(self) -> None:
         cred = credentials.Certificate(config.firebase_config)
+        # cred = credentials.Certificate(os.getenv("firebase_config"))
         firebase_admin.initialize_app(cred)
         self.db = firestore.client()
 
