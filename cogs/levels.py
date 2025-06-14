@@ -58,16 +58,20 @@ class Levels(commands.Cog):
                 await ctx.respond(embed=embed)
         return
 
-    def generate_leaderboard_embed(title, color, thumbnail_url, guild, leaderboard, field_name):
+    def generate_leaderboard_embed(self, title, color, thumbnail_url, guild, leaderboard, field_name):
         embed = discord.Embed(title=title, color=color)
         embed.set_thumbnail(url=thumbnail_url)
-        member_names = [member.name for member in guild.members]
-        filtered_leaderboard = [(name, value) for name, value in leaderboard if name in member_names]
-
+        member_ids = []
+        for member in guild.members:
+            member_ids.append(int(member.id))
+        filtered_leaderboard = []
+        
+        for leader in leaderboard:
+            if int(leader[0]) in member_ids:
+                filtered_leaderboard.append((guild.get_member(int(leader[0])).display_name, leader[1]))
         description = ""
         for i, (name, value) in enumerate(filtered_leaderboard):
             description += f"{i+1}. {name} - {field_name} {value}\n"
-
         embed.description = description
         return embed
         
@@ -94,7 +98,7 @@ class Levels(commands.Cog):
         leaderboard = self.leveler.get_leaderboard()
         description = ""
         for i in range(len(leaderboard)):
-            description += f"{i+1}. {leaderboard[i][0]} - Level {leaderboard[i][1]}\n"
+            description += f"{i+1}. {self.bot.get_user(int(leaderboard[i][0])).name.split('#')[0]} - Level {leaderboard[i][1]}\n"
         embed.description = description
         await ctx.respond(embed=embed)
 

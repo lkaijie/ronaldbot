@@ -100,17 +100,17 @@ class LevelerDB():
     def get_leaderboard(self):
         '''Returns a list of lists of [player_name, player_level] sorted by level'''
         leaderboard = []
-        for x in self.db.collection("SIUers").stream():
-            x = x.to_dict()
-            leaderboard.append([x["player_name"], x["player_level"]])
+        for doc in self.db.collection("SIUers").stream():
+            x = doc.to_dict()
+            leaderboard.append([doc.id, x["player_level"]])
         leaderboard.sort(key=lambda x: x[1], reverse=True)
         return leaderboard
     
     def get_leaderboard_siu(self):
         '''Returns a list of lists of [player_name, player_level] sorted by siu'''
         leaderboard = []
-        for x in self.db.collection("SIUers").stream():
-            x = x.to_dict()
-            leaderboard.append([x["player_name"], x["times_siued"]])
+        for doc in self.db.collection("SIUers").stream():
+            x = doc.to_dict()
+            leaderboard.append([doc.id, x["times_siued"]])
         leaderboard.sort(key=lambda x: x[1], reverse=True)
         return leaderboard
